@@ -37,4 +37,3 @@ O `msemprestimo` chama `msusuario` e `msequipamentos` por descoberta de serviço
 3. Solicitar empréstimo em `POST http://localhost:8083/api/v1/emprestimos`.
 4. Devolver em `PATCH http://localhost:8083/api/v1/emprestimos/{id}/devolucao`.
 
-Os exemplos completos estão em `postman/emprestimo.postman_collection.json`.
