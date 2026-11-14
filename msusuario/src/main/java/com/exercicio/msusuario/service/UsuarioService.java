@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -16,12 +17,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class UsuarioService {
     private final UsuarioRepository repository;
 
+    @Transactional
     public UsuarioResponse criar(CriarUsuarioRequest request) {
         if (repository.existsByEmail(request.email()) || repository.existsByMatricula(request.matricula())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail ou matrícula já cadastrados");
         }
         try {
-            Usuario usuario = repository.save(Usuario.builder()
+            Usuario usuario = repository.saveAndFlush(Usuario.builder()
                     .id(UUID.randomUUID()).nome(request.nome()).email(request.email()).matricula(request.matricula()).build());
             return toResponse(usuario);
         } catch (DataIntegrityViolationException ex) {
@@ -29,6 +31,7 @@ public class UsuarioService {
         }
     }
 
+    @Transactional(readOnly = true)
     public UsuarioResponse buscar(UUID id) {
         return repository.findById(id).map(this::toResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
