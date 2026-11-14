@@ -4,15 +4,74 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8080" },
-    { "key": "sufixo", "value": "" },
-    { "key": "usuarioId", "value": "" },
-    { "key": "equipamentoId", "value": "" },
-    { "key": "equipamento2Id", "value": "" },
-    { "key": "emprestimoId", "value": "" },
-    { "key": "uuidInexistente", "value": "00000000-0000-0000-0000-000000000000" },
-    { "key": "reservaTesteId", "value": "44444444-4444-4444-4444-444444444444" },
-    { "key": "outraReservaId", "value": "55555555-5555-5555-5555-555555555555" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "sufixo",
+      "value": ""
+    },
+    {
+      "key": "usuarioId",
+      "value": ""
+    },
+    {
+      "key": "equipamentoId",
+      "value": ""
+    },
+    {
+      "key": "equipamento2Id",
+      "value": ""
+    },
+    {
+      "key": "emprestimoId",
+      "value": ""
+    },
+    {
+      "key": "uuidInexistente",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "reservaTesteId",
+      "value": "44444444-4444-4444-4444-444444444444"
+    },
+    {
+      "key": "outraReservaId",
+      "value": "55555555-5555-5555-5555-555555555555"
+    },
+    {
+      "key": "eqBomId",
+      "value": ""
+    },
+    {
+      "key": "eqAvariadoId",
+      "value": ""
+    },
+    {
+      "key": "eqFalhaId",
+      "value": ""
+    },
+    {
+      "key": "eqRecuperacaoId",
+      "value": ""
+    },
+    {
+      "key": "empBomId",
+      "value": ""
+    },
+    {
+      "key": "empAvariadoId",
+      "value": ""
+    },
+    {
+      "key": "empFalhaId",
+      "value": ""
+    },
+    {
+      "key": "empRecuperacaoId",
+      "value": ""
+    }
   ],
   "item": [
     {
@@ -21,41 +80,87 @@
         {
           "name": "Criar usuário (201)",
           "event": [
-            { "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('sufixo', Date.now().toString());"] } },
-            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('usuarioId', pm.response.json().id);"] } }
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('sufixo', Date.now().toString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('usuarioId', pm.response.json().id);"
+                ]
+              }
+            }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/usuarios",
-            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Maria Professora\",\n  \"email\": \"maria{{sufixo}}@escola.edu\",\n  \"matricula\": \"MAT{{sufixo}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria Professora\",\n  \"email\": \"maria{{sufixo}}@escola.edu\",\n  \"matricula\": \"MAT{{sufixo}}\"\n}"
+            }
           }
         },
         {
           "name": "Criar usuário com e-mail duplicado (409)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/usuarios",
-            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Outra Pessoa\",\n  \"email\": \"maria{{sufixo}}@escola.edu\",\n  \"matricula\": \"OUTRA{{sufixo}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Outra Pessoa\",\n  \"email\": \"maria{{sufixo}}@escola.edu\",\n  \"matricula\": \"OUTRA{{sufixo}}\"\n}"
+            }
           }
         },
         {
           "name": "Criar usuário inválido (400)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/usuarios",
-            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"\",\n  \"email\": \"nao-e-email\",\n  \"matricula\": \"\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"\",\n  \"email\": \"nao-e-email\",\n  \"matricula\": \"\"\n}"
+            }
           }
         },
         {
           "name": "Consultar usuário (200)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}"
+          }
         },
         {
           "name": "Consultar usuário inexistente (404)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/usuarios/{{uuidInexistente}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/usuarios/{{uuidInexistente}}"
+          }
         }
       ]
     },
@@ -65,48 +170,105 @@
         {
           "name": "Criar equipamento (201)",
           "event": [
-            { "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('sufixo', Date.now().toString());"] } },
-            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('equipamentoId', pm.response.json().id);"] } }
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('sufixo', Date.now().toString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('equipamentoId', pm.response.json().id);"
+                ]
+              }
+            }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/equipamentos",
-            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Notebook Dell\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"PAT{{sufixo}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Notebook Dell\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"PAT{{sufixo}}\"\n}"
+            }
           }
         },
         {
           "name": "Criar segundo equipamento (201)",
           "event": [
-            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('equipamento2Id', pm.response.json().id);"] } }
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('equipamento2Id', pm.response.json().id);"
+                ]
+              }
+            }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/equipamentos",
-            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Projetor Epson\",\n  \"tipo\": \"PROJETOR\",\n  \"patrimonio\": \"PAT2{{sufixo}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Projetor Epson\",\n  \"tipo\": \"PROJETOR\",\n  \"patrimonio\": \"PAT2{{sufixo}}\"\n}"
+            }
           }
         },
         {
           "name": "Criar equipamento com patrimônio duplicado (409)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/equipamentos",
-            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Tablet\",\n  \"tipo\": \"TABLET\",\n  \"patrimonio\": \"PAT{{sufixo}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Tablet\",\n  \"tipo\": \"TABLET\",\n  \"patrimonio\": \"PAT{{sufixo}}\"\n}"
+            }
           }
         },
         {
           "name": "Consultar equipamento (200)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamentoId}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamentoId}}"
+          }
         },
         {
           "name": "Consultar equipamento inexistente (404)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/equipamentos/{{uuidInexistente}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{uuidInexistente}}"
+          }
         },
         {
           "name": "Listar equipamentos disponíveis (200)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/equipamentos/disponiveis" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/equipamentos/disponiveis"
+          }
         }
       ]
     },
@@ -116,74 +278,170 @@
         {
           "name": "Solicitar empréstimo (201, status ATIVO)",
           "event": [
-            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('emprestimoId', pm.response.json().id);"] } }
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('emprestimoId', pm.response.json().id);"
+                ]
+              }
+            }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/emprestimos",
-            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamentoId}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamentoId}}\"\n}"
+            }
           }
         },
         {
           "name": "Solicitar empréstimo de equipamento ocupado (409)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/emprestimos",
-            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamentoId}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamentoId}}\"\n}"
+            }
           }
         },
         {
           "name": "Solicitar empréstimo com usuário inexistente (404)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/emprestimos",
-            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{uuidInexistente}}\",\n  \"equipamentoId\": \"{{equipamento2Id}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{uuidInexistente}}\",\n  \"equipamentoId\": \"{{equipamento2Id}}\"\n}"
+            }
           }
         },
         {
           "name": "Solicitar empréstimo com equipamento inexistente (404)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/emprestimos",
-            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{uuidInexistente}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{uuidInexistente}}\"\n}"
+            }
           }
         },
         {
           "name": "Solicitar empréstimo sem campos obrigatórios (400)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/emprestimos",
-            "body": { "mode": "raw", "raw": "{}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            }
           }
         },
         {
           "name": "Consultar empréstimo (200)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}"
+          }
         },
         {
           "name": "Consultar empréstimo inexistente (404)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/emprestimos/{{uuidInexistente}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{uuidInexistente}}"
+          }
         },
         {
           "name": "Consultar empréstimos do usuário (200)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/emprestimos/usuarios/{{usuarioId}}" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/emprestimos/usuarios/{{usuarioId}}"
+          }
         },
         {
           "name": "Registrar devolução (200, status DEVOLVIDO)",
-          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}/devolucao" }
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            }
+          }
         },
         {
           "name": "Registrar devolução novamente, sem liberar duas vezes (200)",
-          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}/devolucao" }
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            }
+          }
         },
         {
           "name": "Registrar devolução de empréstimo inexistente (404)",
-          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/v1/emprestimos/{{uuidInexistente}}/devolucao" }
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{uuidInexistente}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            }
+          }
         }
       ]
     },
@@ -192,23 +450,38 @@
       "item": [
         {
           "name": "Reservar equipamento (204)",
-          "request": { "method": "PUT", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}"
+          }
         },
         {
           "name": "Repetir a mesma reserva, sem reservar novamente (204)",
-          "request": { "method": "PUT", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}"
+          }
         },
         {
           "name": "Reserva concorrente com outro emprestimoId (409)",
-          "request": { "method": "PUT", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{outraReservaId}}" }
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{outraReservaId}}"
+          }
         },
         {
           "name": "Liberar reserva (204)",
-          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}"
+          }
         },
         {
           "name": "Liberar novamente, sem efeito (204)",
-          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}"
+          }
         }
       ]
     },
@@ -220,9 +493,497 @@
           "request": {
             "description": "Antes de executar, pare a aplicação msequipamento.",
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": "{{baseUrl}}/api/v1/emprestimos",
-            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamento2Id}}\"\n}" }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamento2Id}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Etapa 2 - Condição do equipamento",
+      "item": [
+        {
+          "name": "Criar equipamento CT01 (201)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('sufixo', Date.now().toString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('eqBomId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Notebook CT01\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"E2BOM{{sufixo}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Criar equipamento CT02 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('eqAvariadoId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Notebook CT02\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"E2AVA{{sufixo}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Criar equipamento CT04 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('eqFalhaId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Notebook CT04\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"E2FAL{{sufixo}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Criar equipamento CT06 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('eqRecuperacaoId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Notebook CT06\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"E2REC{{sufixo}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo CT01 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('empBomId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{eqBomId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo CT02 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('empAvariadoId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{eqAvariadoId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo CT04 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('empFalhaId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{eqFalhaId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo CT06 (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('empRecuperacaoId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{eqRecuperacaoId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Novo equipamento nasce com condição BOM (200)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{eqBomId}}"
+          }
+        },
+        {
+          "name": "Alterar condição direto no msequipamento (200, AVARIADO)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{eqRecuperacaoId}}/condicao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"AVARIADO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Alterar condição com valor inválido (400)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{eqRecuperacaoId}}/condicao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"QUEBRADO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CT01 - Devolver com condição BOM (200, DEVOLVIDO)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empBomId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CT01 - Condição do equipamento BOM (200)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{eqBomId}}"
+          }
+        },
+        {
+          "name": "CT02 - Devolver com condição AVARIADO (200, DEVOLVIDO)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empAvariadoId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"AVARIADO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CT02 - Condição do equipamento AVARIADO (200)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{eqAvariadoId}}"
+          }
+        },
+        {
+          "name": "CT03 - Alterar condição de equipamento inexistente (404)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/equipamentos/{{uuidInexistente}}/condicao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Devolver sem condição (400)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Etapa 2 - Circuit Breaker (manual)",
+      "item": [
+        {
+          "name": "CT04 - Devolver com msequipamento parado (503)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            },
+            "description": "Antes de executar, pare a aplicação msequipamento."
+          }
+        },
+        {
+          "name": "CT04 - Empréstimo continua ATIVO (200)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}"
+          }
+        },
+        {
+          "name": "CT05 - Segunda falha técnica (503)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            },
+            "description": "Antes de executar, pare a aplicação msequipamento."
+          }
+        },
+        {
+          "name": "CT05 - Terceira falha técnica, circuito abre (503)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            },
+            "description": "Antes de executar, pare a aplicação msequipamento."
+          }
+        },
+        {
+          "name": "CT05 - Circuito OPEN bloqueia mesmo com msequipamento ativo (503 imediato)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            },
+            "description": "Suba o msequipamento novamente e execute antes de 30 segundos da abertura do circuito."
+          }
+        },
+        {
+          "name": "CT06 - Após 30s, primeira chamada de teste em HALF_OPEN (200, DEVOLVIDO)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empFalhaId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"BOM\"\n}"
+            },
+            "description": "Aguarde 30 segundos após a abertura do circuito, com o msequipamento ativo."
+          }
+        },
+        {
+          "name": "CT06 - Segunda chamada de teste fecha o circuito (200, DEVOLVIDO)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1/emprestimos/{{empRecuperacaoId}}/devolucao",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"condicao\": \"AVARIADO\"\n}"
+            }
           }
         }
       ]
