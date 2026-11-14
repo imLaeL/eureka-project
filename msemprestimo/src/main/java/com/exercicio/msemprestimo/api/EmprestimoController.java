@@ -21,5 +21,8 @@ public class EmprestimoController {
     }
     @GetMapping("/{id}") public EmprestimoResponse buscar(@PathVariable UUID id) { return service.buscar(id); }
     @GetMapping("/usuarios/{usuarioId}") public List<EmprestimoResponse> porUsuario(@PathVariable UUID usuarioId) { return service.porUsuario(usuarioId); }
-    @PatchMapping("/{id}/devolucao") public EmprestimoResponse devolver(@PathVariable UUID id) { return service.devolver(id); }
+    @PatchMapping("/{id}/devolucao")
+    public EmprestimoResponse devolver(@PathVariable UUID id, @Valid @RequestBody DevolucaoRequest request) {
+        return service.devolver(id, request.condicao());
+    }
 }

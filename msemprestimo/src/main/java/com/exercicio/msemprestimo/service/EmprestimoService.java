@@ -3,6 +3,9 @@ package com.exercicio.msemprestimo.service;
 import com.exercicio.msemprestimo.api.EmprestimoDtos.*;
 import com.exercicio.msemprestimo.client.*;
 import com.exercicio.msemprestimo.domain.*;
+import com.exercicio.msemprestimo.enums.CondicaoEnum;
+import com.exercicio.msemprestimo.gateway.EquipamentoGateway;
+import com.exercicio.msemprestimo.gateway.UsuarioGateway;
 import com.exercicio.msemprestimo.repository.EmprestimoRepository;
 import feign.FeignException;
 import java.time.LocalDateTime;
@@ -18,15 +21,15 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class EmprestimoService {
-    private static final String MSUSUARIO = "msusuario";
     private static final String MSEQUIPAMENTO = "msequipamento";
 
     private final EmprestimoRepository repository;
-    private final UsuarioClient usuarioClient;
     private final EquipamentoClient equipamentoClient;
+    private final UsuarioGateway usuarioGateway;
+    private final EquipamentoGateway equipamentoGateway;
 
     public EmprestimoResponse criar(CriarEmprestimoRequest request) {
-        validarUsuario(request.usuarioId());
+        usuarioGateway.buscar(request.usuarioId());
         consultarEquipamento(request.equipamentoId());
         UUID id = UUID.randomUUID();
         reservarEquipamento(request.equipamentoId(), id);
@@ -51,11 +54,12 @@ public class EmprestimoService {
         return repository.findByUsuarioIdOrderByDataEmprestimoDesc(usuarioId).stream().map(this::toResponse).toList();
     }
 
-    public EmprestimoResponse devolver(UUID id) {
+    public EmprestimoResponse devolver(UUID id, CondicaoEnum condicao) {
         Emprestimo emprestimo = buscarEntidade(id);
         if (emprestimo.getStatus() != StatusEmprestimo.ATIVO) {
             return toResponse(emprestimo);
         }
+        equipamentoGateway.atualizarCondicao(emprestimo.getEquipamentoId(), condicao);
         liberarEquipamento(emprestimo.getEquipamentoId(), id);
         emprestimo.setStatus(StatusEmprestimo.DEVOLVIDO);
         emprestimo.setDataDevolucao(LocalDateTime.now());
@@ -65,16 +69,6 @@ public class EmprestimoService {
     private Emprestimo buscarEntidade(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
-    }
-
-    private void validarUsuario(UUID usuarioId) {
-        try {
-            usuarioClient.buscar(usuarioId);
-        } catch (FeignException.NotFound ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado", ex);
-        } catch (FeignException ex) {
-            throw falhaComunicacao(MSUSUARIO, ex);
-        }
     }
 
     private void consultarEquipamento(UUID equipamentoId) {
@@ -103,8 +97,6 @@ public class EmprestimoService {
     private void liberarEquipamento(UUID equipamentoId, UUID emprestimoId) {
         try {
             equipamentoClient.liberar(equipamentoId, emprestimoId);
-        } catch (FeignException.NotFound ex) {
-            log.warn("Equipamento {} não encontrado ao liberar empréstimo {}", equipamentoId, emprestimoId);
         } catch (FeignException ex) {
             throw falhaComunicacao(MSEQUIPAMENTO, ex);
         }
