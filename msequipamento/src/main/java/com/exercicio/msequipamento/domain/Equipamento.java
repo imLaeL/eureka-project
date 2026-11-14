@@ -17,9 +17,8 @@ public class Equipamento {
     @Column(nullable = false, length = 150) private String nome;
     @Column(nullable = false, length = 60) private String tipo;
     @Column(nullable = false, unique = true, length = 60) private String patrimonio;
+    @Setter
     @Column(nullable = false) private boolean disponivel;
+    @Setter
     @Column(columnDefinition = "char(36)") private UUID reservaEmprestimoId;
-
-    public void reservar(UUID emprestimoId) { this.disponivel = false; this.reservaEmprestimoId = emprestimoId; }
-    public void liberar() { this.disponivel = true; this.reservaEmprestimoId = null; }
 }
