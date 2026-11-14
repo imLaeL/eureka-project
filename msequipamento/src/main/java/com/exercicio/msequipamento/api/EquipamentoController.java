@@ -30,4 +30,9 @@ public class EquipamentoController {
     public ResponseEntity<Void> liberar(@PathVariable UUID id, @PathVariable UUID emprestimoId) {
         service.liberar(id, emprestimoId); return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/condicao")
+    public EquipamentoResponse atualizarCondicao(@PathVariable UUID id, @Valid @RequestBody AtualizarCondicaoRequest request) {
+        return service.atualizarCondicao(id, request.condicao());
+    }
 }
