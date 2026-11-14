@@ -6,11 +6,10 @@ spring:
     username: root
     password: root
   jpa:
-    #hibernate:
-    #ddl-auto: update
     show-sql: true
     properties:
       hibernate.format_sql: true
+      hibernate.type.preferred_uuid_jdbc_type: CHAR
     open-in-view: false
   flyway:
     enabled: true
@@ -26,14 +25,9 @@ eureka:
     hostname: localhost
     instance-id: ${spring.application.name}:${random.value}
 
-#spring.cloud.openfeign:
-#  client:
-#    config:
-#      default:
-#        connectTimeout: 2000
-#        readTimeout: 5000
-#spring.cloud.discovery.client.simple.instances:
-#  msusuario:
-#    - uri: http://localhost:8081
-#  msequipamentos:
-#    - uri: http://localhost:8082
+spring.cloud.openfeign:
+  client:
+    config:
+      default:
+        connect-timeout: 2000
+        read-timeout: 5000
