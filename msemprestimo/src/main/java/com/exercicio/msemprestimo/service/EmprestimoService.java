@@ -27,6 +27,7 @@ public class EmprestimoService {
 
     public EmprestimoResponse criar(CriarEmprestimoRequest request) {
         validarUsuario(request.usuarioId());
+        consultarEquipamento(request.equipamentoId());
         UUID id = UUID.randomUUID();
         reservarEquipamento(request.equipamentoId(), id);
         try {
@@ -72,6 +73,16 @@ public class EmprestimoService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado", ex);
         } catch (FeignException ex) {
             throw falhaComunicacao(MSUSUARIO, ex);
+        }
+    }
+
+    private void consultarEquipamento(UUID equipamentoId) {
+        try {
+            equipamentoClient.buscar(equipamentoId);
+        } catch (FeignException.NotFound ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado", ex);
+        } catch (FeignException ex) {
+            throw falhaComunicacao(MSEQUIPAMENTO, ex);
         }
     }
 

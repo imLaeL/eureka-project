@@ -1,0 +1,231 @@
+{
+  "info": {
+    "name": "Empréstimo de Equipamentos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "sufixo", "value": "" },
+    { "key": "usuarioId", "value": "" },
+    { "key": "equipamentoId", "value": "" },
+    { "key": "equipamento2Id", "value": "" },
+    { "key": "emprestimoId", "value": "" },
+    { "key": "uuidInexistente", "value": "00000000-0000-0000-0000-000000000000" },
+    { "key": "reservaTesteId", "value": "44444444-4444-4444-4444-444444444444" },
+    { "key": "outraReservaId", "value": "55555555-5555-5555-5555-555555555555" }
+  ],
+  "item": [
+    {
+      "name": "1. Usuários",
+      "item": [
+        {
+          "name": "Criar usuário (201)",
+          "event": [
+            { "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('sufixo', Date.now().toString());"] } },
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('usuarioId', pm.response.json().id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/usuarios",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Maria Professora\",\n  \"email\": \"maria{{sufixo}}@escola.edu\",\n  \"matricula\": \"MAT{{sufixo}}\"\n}" }
+          }
+        },
+        {
+          "name": "Criar usuário com e-mail duplicado (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/usuarios",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Outra Pessoa\",\n  \"email\": \"maria{{sufixo}}@escola.edu\",\n  \"matricula\": \"OUTRA{{sufixo}}\"\n}" }
+          }
+        },
+        {
+          "name": "Criar usuário inválido (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/usuarios",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"\",\n  \"email\": \"nao-e-email\",\n  \"matricula\": \"\"\n}" }
+          }
+        },
+        {
+          "name": "Consultar usuário (200)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}" }
+        },
+        {
+          "name": "Consultar usuário inexistente (404)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/usuarios/{{uuidInexistente}}" }
+        }
+      ]
+    },
+    {
+      "name": "2. Equipamentos",
+      "item": [
+        {
+          "name": "Criar equipamento (201)",
+          "event": [
+            { "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('sufixo', Date.now().toString());"] } },
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('equipamentoId', pm.response.json().id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Notebook Dell\",\n  \"tipo\": \"NOTEBOOK\",\n  \"patrimonio\": \"PAT{{sufixo}}\"\n}" }
+          }
+        },
+        {
+          "name": "Criar segundo equipamento (201)",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('equipamento2Id', pm.response.json().id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Projetor Epson\",\n  \"tipo\": \"PROJETOR\",\n  \"patrimonio\": \"PAT2{{sufixo}}\"\n}" }
+          }
+        },
+        {
+          "name": "Criar equipamento com patrimônio duplicado (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/equipamentos",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Tablet\",\n  \"tipo\": \"TABLET\",\n  \"patrimonio\": \"PAT{{sufixo}}\"\n}" }
+          }
+        },
+        {
+          "name": "Consultar equipamento (200)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamentoId}}" }
+        },
+        {
+          "name": "Consultar equipamento inexistente (404)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/equipamentos/{{uuidInexistente}}" }
+        },
+        {
+          "name": "Listar equipamentos disponíveis (200)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/equipamentos/disponiveis" }
+        }
+      ]
+    },
+    {
+      "name": "3. Empréstimos",
+      "item": [
+        {
+          "name": "Solicitar empréstimo (201, status ATIVO)",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('emprestimoId', pm.response.json().id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamentoId}}\"\n}" }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo de equipamento ocupado (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamentoId}}\"\n}" }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo com usuário inexistente (404)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{uuidInexistente}}\",\n  \"equipamentoId\": \"{{equipamento2Id}}\"\n}" }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo com equipamento inexistente (404)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{uuidInexistente}}\"\n}" }
+          }
+        },
+        {
+          "name": "Solicitar empréstimo sem campos obrigatórios (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Consultar empréstimo (200)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}" }
+        },
+        {
+          "name": "Consultar empréstimo inexistente (404)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/emprestimos/{{uuidInexistente}}" }
+        },
+        {
+          "name": "Consultar empréstimos do usuário (200)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/emprestimos/usuarios/{{usuarioId}}" }
+        },
+        {
+          "name": "Registrar devolução (200, status DEVOLVIDO)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}/devolucao" }
+        },
+        {
+          "name": "Registrar devolução novamente, sem liberar duas vezes (200)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/v1/emprestimos/{{emprestimoId}}/devolucao" }
+        },
+        {
+          "name": "Registrar devolução de empréstimo inexistente (404)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/v1/emprestimos/{{uuidInexistente}}/devolucao" }
+        }
+      ]
+    },
+    {
+      "name": "4. Reserva idempotente",
+      "item": [
+        {
+          "name": "Reservar equipamento (204)",
+          "request": { "method": "PUT", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+        },
+        {
+          "name": "Repetir a mesma reserva, sem reservar novamente (204)",
+          "request": { "method": "PUT", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+        },
+        {
+          "name": "Reserva concorrente com outro emprestimoId (409)",
+          "request": { "method": "PUT", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{outraReservaId}}" }
+        },
+        {
+          "name": "Liberar reserva (204)",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+        },
+        {
+          "name": "Liberar novamente, sem efeito (204)",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/v1/equipamentos/{{equipamento2Id}}/reservas/{{reservaTesteId}}" }
+        }
+      ]
+    },
+    {
+      "name": "5. Erro de comunicação",
+      "item": [
+        {
+          "name": "Solicitar empréstimo com msequipamento parado (503)",
+          "request": {
+            "description": "Antes de executar, pare a aplicação msequipamento.",
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/emprestimos",
+            "body": { "mode": "raw", "raw": "{\n  \"usuarioId\": \"{{usuarioId}}\",\n  \"equipamentoId\": \"{{equipamento2Id}}\"\n}" }
+          }
+        }
+      ]
+    }
+  ]
+}
