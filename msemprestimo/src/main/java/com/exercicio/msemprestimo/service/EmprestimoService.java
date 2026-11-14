@@ -57,7 +57,8 @@ public class EmprestimoService {
             return toResponse(emprestimo);
         }
         liberarEquipamento(emprestimo.getEquipamentoId(), id);
-        emprestimo.devolver();
+        emprestimo.setStatus(StatusEmprestimo.DEVOLVIDO);
+        emprestimo.setDataDevolucao(LocalDateTime.now());
         return toResponse(repository.save(emprestimo));
     }
 

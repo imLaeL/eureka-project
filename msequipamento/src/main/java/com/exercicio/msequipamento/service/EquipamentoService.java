@@ -50,7 +50,8 @@ public class EquipamentoService {
         if (!equipamento.isDisponivel()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Equipamento indisponível");
         }
-        equipamento.reservar(emprestimoId);
+        equipamento.setDisponivel(false);
+        equipamento.setReservaEmprestimoId(emprestimoId);
     }
 
     @Transactional
@@ -58,7 +59,8 @@ public class EquipamentoService {
         Equipamento equipamento = repository.findByIdForUpdate(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
         if (emprestimoId.equals(equipamento.getReservaEmprestimoId())) {
-            equipamento.liberar();
+            equipamento.setDisponivel(true);
+            equipamento.setReservaEmprestimoId(null);
         }
     }
 

@@ -17,14 +17,9 @@ public class Emprestimo {
     @Column(nullable = false, columnDefinition = "char(36)") private UUID usuarioId;
     @Column(nullable = false, columnDefinition = "char(36)") private UUID equipamentoId;
     @Column(nullable = false) private LocalDateTime dataEmprestimo;
+    @Setter
     private LocalDateTime dataDevolucao;
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20) private StatusEmprestimo status;
-
-    public void devolver() {
-        if (status == StatusEmprestimo.ATIVO) {
-            status = StatusEmprestimo.DEVOLVIDO;
-            dataDevolucao = LocalDateTime.now();
-        }
-    }
 }
