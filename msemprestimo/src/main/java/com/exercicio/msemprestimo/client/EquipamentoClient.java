@@ -1,5 +1,6 @@
 package com.exercicio.msemprestimo.client;
 
+import com.exercicio.msemprestimo.api.AtualizarCondicaoRequest;
 import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,5 +12,7 @@ public interface EquipamentoClient {
     void reservar(@PathVariable UUID id, @PathVariable UUID emprestimoId);
     @DeleteMapping("/{id}/reservas/{emprestimoId}")
     void liberar(@PathVariable UUID id, @PathVariable UUID emprestimoId);
+    @PutMapping("/{id}/condicao")
+    EquipamentoResponse atualizarCondicao(@PathVariable UUID id, @RequestBody AtualizarCondicaoRequest request);
     record EquipamentoResponse(UUID id, String nome, String tipo, String patrimonio, boolean disponivel) {}
 }

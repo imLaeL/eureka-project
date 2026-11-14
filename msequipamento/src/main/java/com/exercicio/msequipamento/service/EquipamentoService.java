@@ -2,6 +2,7 @@ package com.exercicio.msequipamento.service;
 
 import com.exercicio.msequipamento.api.EquipamentoDtos.*;
 import com.exercicio.msequipamento.domain.Equipamento;
+import com.exercicio.msequipamento.enums.CondicaoEnum;
 import com.exercicio.msequipamento.repository.EquipamentoRepository;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,15 @@ public class EquipamentoService {
     }
 
     private EquipamentoResponse toResponse(Equipamento e) {
-        return new EquipamentoResponse(e.getId(), e.getNome(), e.getTipo(), e.getPatrimonio(), e.isDisponivel());
+        return new EquipamentoResponse(e.getId(), e.getNome(), e.getTipo(), e.getPatrimonio(), e.isDisponivel(),
+                e.getCondicao());
+    }
+
+    @Transactional
+    public EquipamentoResponse atualizarCondicao(UUID id, CondicaoEnum condicao) {
+        Equipamento equipamento = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
+        equipamento.setCondicao(condicao);
+        return toResponse(equipamento);
     }
 }

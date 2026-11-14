@@ -1,5 +1,6 @@
 package com.exercicio.msequipamento.domain;
 
+import com.exercicio.msequipamento.enums.CondicaoEnum;
 import jakarta.persistence.*;
 import java.util.UUID;
 import lombok.*;
@@ -21,4 +22,10 @@ public class Equipamento {
     @Column(nullable = false) private boolean disponivel;
     @Setter
     @Column(columnDefinition = "char(36)") private UUID reservaEmprestimoId;
+
+    @Setter
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private CondicaoEnum condicao = CondicaoEnum.BOM;
 }

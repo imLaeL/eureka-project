@@ -81,7 +81,8 @@ curl http://localhost:8080/api/v1/emprestimos/<emprestimoId>
 
 curl http://localhost:8080/api/v1/emprestimos/usuarios/<usuarioId>
 
-curl -X PATCH http://localhost:8080/api/v1/emprestimos/<emprestimoId>/devolucao
+curl -X PATCH http://localhost:8080/api/v1/emprestimos/<emprestimoId>/devolucao -H 'Content-Type: application/json' \
+  -d '{"condicao":"AVARIADO"}'
 ```
 
 Resposta do `POST /api/v1/emprestimos`:
@@ -98,7 +99,7 @@ HTTP/1.1 201 Created
 }
 ```
 
-A collection `postman/emprestimo-equipamentos.postman_collection.json` traz todos os endpoints e os cenários de teste. Importe no Postman e execute as pastas em ordem; a pasta 5 exige parar o msequipamento antes.
+A collection `postman/emprestimo-equipamentos.postman_collection.json` traz todos os endpoints e os cenários de teste. Importe no Postman e execute as pastas em ordem; as pastas 5 e 7 exigem parar o msequipamento antes (a 7 segue as instruções de cada request).
 
 ## Limites de consistência
 

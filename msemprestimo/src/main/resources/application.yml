@@ -31,3 +31,16 @@ spring.cloud.openfeign:
       default:
         connect-timeout: 2000
         read-timeout: 5000
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      atualizarCondicao:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30s
+        permittedNumberOfCallsInHalfOpenState: 2
+        ignoreExceptions:
+          - feign.FeignException$FeignClientException
